@@ -4,12 +4,20 @@
   "description": "inotebook - work as cloud in which you can save your notes that can be acess by your own only !",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
     "mongoose": "^8.15.2"
+  },
+"devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
+
