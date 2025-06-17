@@ -4,6 +4,7 @@ const User = require("../models/User"); // Assuming you have a User model define
 const { body, validationResult } = require("express-validator"); // validationResult is a function from express-validator that checks for validation errors
 const bcrypt = require("bcryptjs"); // Uncomment if you want to hash passwords before saving them
 const jwt = require("jsonwebtoken"); // Uncomment if you want to use JWT for authentication
+const fetchuser = require("../middleware/fetchuser"); //The ../ means "go up one directory level". bcz it it used in auth.js file
 
 const JWT_SECRET = "Himanshu@123"; // Secret key for JWT, should be stored in an environment variable in production
 
@@ -115,6 +116,7 @@ router.post(
         },
       };
       const authToken = jwt.sign(Data, JWT_SECRET); // Sign the JWT with the user data and secret key
+      //console.log("JWT Token:", authToken); // Log the JWT token for debugging
       res.json(authToken); // Return the JWT token as JSON response
     } catch (error) {
       console.error("Error logging in:", error.message);
@@ -126,4 +128,19 @@ router.post(
   }
 );
 
+// Route 3: Get logged-in User details using : POST "/api/auth/getuser" (login required)
+router.post("/getuser",fetchuser, async (req, res) => {
+  try {
+    // Get the user ID from the JWT token
+    const userId = req.user.id; // Assuming req.user is populated with the authenticated user's data above login Data mathi aavse
+    const user = await User.findById(userId).select("-password"); // Exclude password from the response
+    res.json(user); // Return the user details as JSON response res.send(user) is also fine
+  } catch (error) {
+    console.error("Error fetching user details:", error.message);
+    res.status(500).json({
+      error: "Failed to fetch user details due to server internal error!",
+      message: error.message,
+    }); // Handle errors if needed
+  }
+});
 module.exports = router;
