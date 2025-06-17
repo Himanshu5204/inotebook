@@ -4,7 +4,7 @@ const express = require('express');
 
 connectToMongo();
 const app = express()
-const port = 3000 //thunder client api check after mongo connect http://localhost:3000/
+const port = 5000 //thunder client api check after mongo connect http://localhost:5000/ 
 
 app.use(express.json()); // req.body auth.js mate required Middleware to parse JSON bodies Middleware to parse URL-encoded bodies (for form submissions)
 
