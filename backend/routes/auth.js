@@ -8,7 +8,7 @@ router.post('/', (req, res) => {
     
     console.log(req.body);
     const user = User(req.body);     // Here you would typically save the user to the database
-    user.save()
+    user.save() //data saved to database 
     
     res.send(req.body)
     //res.send('Hello Himanshu! This is the auth route.');
