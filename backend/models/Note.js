@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
+const { use } = require('react');
+const { Schema } = mongoose;
 
 const NotesSchema = new Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user', // Reference to the User model 
+        required: true,
+    },
     title: {
         type: String,
         required: true,
@@ -20,4 +27,4 @@ const NotesSchema = new Schema({
     
 });
 
-module.exports = mongoose.model('notes', NotesSchema);
+module.exports = mongoose.model('notes', NotesSchema); // notes table/collection name in the database
