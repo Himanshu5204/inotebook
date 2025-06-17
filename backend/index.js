@@ -1,5 +1,6 @@
 const connectToMongo = require('./db');
 const express = require('express');
+// const { query } = require('express-validator');
 
 connectToMongo();
 const app = express()
