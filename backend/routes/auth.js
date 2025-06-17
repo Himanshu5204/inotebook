@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User"); // Assuming you have a User model defined in models/User.js
 const { body, validationResult } = require("express-validator"); // validationResult is a function from express-validator that checks for validation errors
-// const bcrypt = require("bcryptjs"); // Uncomment if you want to hash passwords before saving them
-// const jwt = require("jsonwebtoken"); // Uncomment if you want to use JWT for authentication
+const bcrypt = require("bcryptjs"); // Uncomment if you want to hash passwords before saving them
+const jwt = require("jsonwebtoken"); // Uncomment if you want to use JWT for authentication
+
+const JWT_SECRET="Himanshu@123"; // Secret key for JWT, should be stored in an environment variable in production
 
 // Create a User using : POST "/api/auth/createuser" (no login/authentication required)
 router.post(
@@ -33,13 +35,25 @@ router.post(
           error: "Sorry a user with this email already exists",
         });
       }
+      const salt = await bcrypt.genSalt(10); // Generate a salt for hashing the password
+      secPass = await bcrypt.hash(req.body.password, salt) // Hash the password using bcrypt
+      console.log("Hashed Password:", secPass); // Log the hashed password for debugging
       // Create a new user if no user with this email exists no every time we reach this point, we know that the email is unique
       user = await User.create({
         name: req.body.name,
-        password: req.body.password,
+        password: secPass,
         email: req.body.email,
       });
-      res.json(user); // Return the created user as JSON response shown in Postman or Thunder Client
+
+      const Data = {
+        user: {
+          id: user.id, // user._id is the unique identifier for the user in MongoDB
+        },
+      };
+      const authToken = jwt.sign(Data, JWT_SECRET); // Sign the JWT with the user data and secret key
+      // console.log("JWT Token:", authToken); // Log the JWT token for debugging
+      // res.json({authToken:authToken,}); same as below when someone give token we get above Data
+      res.json(authToken); // Return the created user as JSON response shown in Postman or Thunder Client
     } catch (error) {
       console.error("Error creating user:", error.message);
       res.status(500).json({
