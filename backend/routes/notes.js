@@ -43,6 +43,72 @@ router.post(
   }
 );
 
+// Route 3 : Update an existing note using: PUT "/api/notes/updatenote/:id". Login required
+router.put(
+  "/updatenote/:id",
+  fetchuser,
+  async (req, res) => {
+    const { title, description, tag } = req.body; // Destructure the request body to get title, description, and tag
+    const newNote = {}; // Create an object to hold the updated note data
+
+    if (title) {
+      newNote.title = title; // If title is provided, update it
+    }
+    if (description) {
+      newNote.description = description; // If description is provided, update it
+    }
+    if (tag) {
+      newNote.tag = tag; // If tag is provided, update it
+    }
+
+    try {
+      // Find the note by ID and update it with the new data
+      let note = await Note.findById(req.params.id);
+      if (!note) {
+        return res.status(404).send("Not Found"); // If note not found, return 404 status
+      }
+      if (note.user.toString() !== req.user.id) {
+        return res.status(401).send("Not Allowed"); // If user does not own the note, return 401 status
+      }
+
+      note = await Note.findByIdAndUpdate(
+        req.params.id,
+        { $set: newNote },
+        { new: true } // Return the updated note
+      );
+      res.json(note); // Send the updated note as a JSON response
+    } catch (error) {
+      console.error("Error updating note:", error.message);
+      res.status(500).send("Internal Server Error"); // Handle any errors that occur during the update operation
+    }
+  }
+);
+
+// Route 4 : Delete an existing note using: DELETE "/api/notes/deletenote/:id". Login required
+router.delete(
+  "/deletenote/:id",
+  fetchuser,
+  async (req, res) => {
+    try {
+      // Find the note by ID
+      let note = await Note.findById(req.params.id);
+      if (!note) {
+        return res.status(404).send("Not Found"); // If note not found, return 404 status
+      }
+      if (note.user.toString() !== req.user.id) {
+        return res.status(401).send("Not Allowed"); // If user does not own the note, return 401 status
+      }
+
+      // Delete the note
+      note = await Note.findByIdAndDelete(req.params.id);
+      res.json({ success: "Note has been deleted", note }); // Send a success message and the deleted note as a JSON response
+    } catch (error) {
+      console.error("Error deleting note:", error.message);
+      res.status(500).send("Internal Server Error"); // Handle any errors that occur during the delete operation
+    }
+  }
+);
+
 
 // Route 1 : Fetch all notes using: POST "/api/notes/fetchallnotes". Login required
 // router.post('/fetchallnotes',fetchuser, (req, res) => { //promises so .then
