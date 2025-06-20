@@ -1,10 +1,13 @@
 const connectToMongo = require('./db');
 const express = require('express');
+var cors = require('cors')
+
 // const { query } = require('express-validator');
 
 connectToMongo();
 const app = express()
 const port = 5000 //thunder client api check after mongo connect http://localhost:5000/ 
+app.use(cors())
 
 app.use(express.json()); // req.body auth.js mate required Middleware to parse JSON bodies Middleware to parse URL-encoded bodies (for form submissions)
 

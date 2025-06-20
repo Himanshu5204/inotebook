@@ -3,7 +3,7 @@ import noteContext from "../context/notes/NoteContext";
 
 const AddNote = () => {
      const context = useContext(noteContext); //for using context notestate.js ..one step up
-      const {addNote } = context;
+      const {addNote } = context; //notestate context ma addnote function add che
 
       const [note, setNote] = useState({title:"",description:"",tag:"default"});
 
@@ -56,7 +56,7 @@ const AddNote = () => {
           </label>
         </div>
         <button type="submit" className="btn btn-primary" onClick={handleClick}>
-          Submit
+          Add Note
         </button>
       </form>
     </div>
