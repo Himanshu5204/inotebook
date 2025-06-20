@@ -4,7 +4,7 @@ import { Link,useLocation } from "react-router-dom";
 const Navbar = () => {
   let location = useLocation();
   useEffect(() => {
-    console.log(location);
+    //console.log(location);
   }, [location]); //when change location this useEffect will run see console pathname is chnaged
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
