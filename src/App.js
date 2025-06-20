@@ -1,20 +1,23 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom"; //Switch was removed in React Router v6. use Routes 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //Switch was removed in React Router v6. use Routes
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import About from "./components/About";
+import NoteState from "./context/notes/NoteState";
 
 function App() {
   return (
     <>
-      <Router>
-      <Navbar />
-      <Routes>
-        <Route  path="/" element={<Home />} />
-        <Route exact path="/about" element={<About />} />
-      </Routes>
-    </Router>
-
+    {/* NoteState as context that is used in all below components */}
+      <NoteState> 
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route exact path="/about" element={<About />} />
+          </Routes>
+        </Router>
+      </NoteState>
 
       <footer className="text-center mt-5">
         <p>© 2025 iNotebook. All rights reserved.</p>
