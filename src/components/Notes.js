@@ -25,14 +25,14 @@ const Notes = () => {
   
 
   const handleClick = (e) => {
-    console.log('Updating a note',note);
+    //console.log('Updating a note',note);
     // e.preventDefault(); //to avoid page refresh not need here bcz update node button is not part here
     editNote(note.id,note.etitle,note.edescription,note.etag);
     refClose.current.click(); //update per click button close
   };
 
   const onChange = (e) => {
-    console.log(e.target.value);
+    //console.log(e.target.value);
     setNote({ ...note, [e.target.name]: e.target.value }); // ... note ni andar je hoy te rahe and next values add/overwrite kari dejo
   };
 
@@ -64,6 +64,7 @@ const Notes = () => {
                     aria-describedby='emailHelp'
                     placeholder='Enter title'
                     onChange={onChange}
+                    minLength={5} required
                   />
                 </div>
                 <div className='form-group'>
@@ -76,6 +77,7 @@ const Notes = () => {
                     name='edescription'
                     placeholder='Enter description'
                     onChange={onChange}
+                    minLength={5} required
                   />
                 </div>
                 <div className='form-group'>
@@ -88,6 +90,7 @@ const Notes = () => {
                     name='etag'
                     placeholder='Enter tag'
                     onChange={onChange}
+                    minLength={5} required
                   />
                 </div>
               </form>
@@ -96,8 +99,8 @@ const Notes = () => {
               <button type='button' ref={refClose} className='btn btn-secondary' data-bs-dismiss='modal'>
                 Close
               </button>
-              <button type='button' className='btn btn-primary' onClick={handleClick}>
-                Update Note
+              <button  type='button' className='btn btn-primary' onClick={handleClick}> 
+                Update Note 
               </button>
             </div>
           </div>
@@ -105,6 +108,10 @@ const Notes = () => {
       </div>
       <div className='row my-3'>
         <h2>Your a Note</h2>
+        {notes.length === 0 && 
+        <div className='container my-3'>
+          No notes to display
+          </div>}
         {notes.map((note) => {
           return <NoteItem note={note} key={note._id} updateNote={updateNote} />;
         })}

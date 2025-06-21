@@ -5,11 +5,12 @@ const AddNote = () => {
      const context = useContext(noteContext); //for using context notestate.js ..one step up
       const {addNote } = context; //notestate context ma addnote function add che
 
-      const [note, setNote] = useState({title:"",description:"",tag:"default"});
+      const [note, setNote] = useState({title:"",description:"",tag:""});
 
       const handleClick =(e)=>{
         e.preventDefault(); //to avoid page refresh
         addNote(note.title,note.description,note.tag);
+        setNote({title:"",description:"",tag:""});
       }
 
       const onChange=(e)=>{
@@ -20,17 +21,19 @@ const AddNote = () => {
   return (
     <div className="container my-3">
       <h2>Add a Note</h2>
-      <form className="my-3">
+      <form className="my-3" type="submit">
         <div className="form-group">
           <label htmlFor="title">title</label>
           <input
             type="text"
             id="title"
             name="title"
+            value={note.title}
             className="form-control"
             aria-describedby="emailHelp"
             placeholder="Enter title"
             onChange={onChange}
+            minLength={5} required
           />
 
         </div>
@@ -41,8 +44,10 @@ const AddNote = () => {
             className="form-control"
             id="description"
             name="description"
+            value={note.description}
             placeholder="Enter description"
             onChange={onChange}
+            minLength={5} required
           />
         </div>
         <div className="form-group">
@@ -51,9 +56,11 @@ const AddNote = () => {
             type="text"
             className="form-control"
             id="tag"
+            value={note.tag}
             name="tag"
             placeholder="Enter tag"
             onChange={onChange}
+            minLength={5} required
           />
         </div>
         <button type="submit" className="btn btn-primary my-3" onClick={handleClick}>
