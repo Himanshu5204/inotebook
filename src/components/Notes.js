@@ -5,7 +5,7 @@ import noteContext from '../context/notes/NoteContext';
 
 const Notes = () => {
   const context = useContext(noteContext); //for using context notestate.js ..one step up
-  const { notes, getNotes } = context;
+  const { notes, getNotes,editNote} = context;
   useEffect(() => {
     //used as componentDidMount
     getNotes();
@@ -13,18 +13,22 @@ const Notes = () => {
   }, []); // one time fetch []
 
   const [note, setNote] = useState({ title: '', description: '', tag: '' });
+  const ref = useRef(null);
+  const refClose = useRef(null);
+
 
   const updateNote = (currentNote) => {
     ref.current.click();
-    setNote({etitle:currentNote.title,edescription:currentNote.description,etag:currentNote.tag});
+    setNote({id:currentNote._id,etitle:currentNote.title,edescription:currentNote.description,etag:currentNote.tag});
   };
 
-  const ref = useRef(null);
-
+  
 
   const handleClick = (e) => {
     console.log('Updating a note',note);
-    e.preventDefault(); //to avoid page refresh
+    // e.preventDefault(); //to avoid page refresh not need here bcz update node button is not part here
+    editNote(note.id,note.etitle,note.edescription,note.etag);
+    refClose.current.click(); //update per click button close
   };
 
   const onChange = (e) => {
@@ -89,7 +93,7 @@ const Notes = () => {
               </form>
             </div>
             <div className='modal-footer'>
-              <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>
+              <button type='button' ref={refClose} className='btn btn-secondary' data-bs-dismiss='modal'>
                 Close
               </button>
               <button type='button' className='btn btn-primary' onClick={handleClick}>
