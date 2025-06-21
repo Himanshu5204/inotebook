@@ -86,6 +86,7 @@ router.post(
     body("password", "Password cannot be blank").exists(),
   ],
   async (req, res) => {
+    let success = false;
     // if there are validation errors, return a 400 Bad Request response with the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -97,6 +98,7 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
+        success = false;
         return res.status(400).json({
           error: "Please try to login with correct credentials", //as email not found
         });
@@ -105,7 +107,9 @@ router.post(
       // Compare the provided password with the hashed password stored in the database
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
+        success = false;
         return res.status(400).json({
+          success,
           error: "Please try to login with correct credentials",
         });
       }
@@ -117,7 +121,8 @@ router.post(
       };
       const authToken = jwt.sign(Data, JWT_SECRET); // Sign the JWT with the user data and secret key
       //console.log("JWT Token:", authToken); // Log the JWT token for debugging
-      res.json(authToken); // Return the JWT token as JSON response
+      success = true;
+      res.json({success , authToken}); // Return the JWT token as JSON response
     } catch (error) {
       console.error("Error logging in:", error.message);
       res.status(500).json({
