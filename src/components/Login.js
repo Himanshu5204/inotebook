@@ -44,10 +44,7 @@ const Login = () => {
         <label htmlFor='password'>Password</label>
         <input type='password' className='form-control' id='password' name='password' placeholder='Password' />
       </div>
-      <div className='form-check'>
-        <input type='checkbox' className='form-check-input' id='exampleCheck1' />
-      </div>
-      <button type='submit' className='btn btn-primary'>
+      <button type='submit' className='btn btn-primary my-4'>
         Submit
       </button>
     </form>

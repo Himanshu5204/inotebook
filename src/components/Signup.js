@@ -1,11 +1,104 @@
-import React from 'react' //rafce 
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
-  return (
-    <div>
-      i am in signup
-    </div>
-  )
-}
+  const [credentials, setCredentials] = useState({ name: '', email: '', password: '', cpassword: '' });
+  let navigate = useNavigate();
 
-export default Signup
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { name, email, password, cpassword } = credentials;
+
+    if (password !== cpassword) {
+      alert('Passwords do not match');
+      return;
+    }
+    const response = await fetch('http://localhost:5000/api/auth/createuser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, email, password }) 
+    });
+    const json = await response.json();
+    console.log(json);
+    if (json.success) {
+      // save the auth token and redirect
+      localStorage.setItem('token', json.authtoken);
+      navigate('/');
+    } else {
+      alert('Invalid Credentials');
+    }
+  };
+
+  const onChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
+  return (
+    <div className='container'>
+      <form onSubmit={handleSubmit}>
+        <div className='form-group mb-2'>
+          <label htmlFor='exampleInputEmail1'>Name</label>
+          <input
+            type='text'
+            className='form-control mb-1'
+            id='name'
+            name='name'
+            aria-describedby='emailHelp'
+            onChange={onChange}
+            placeholder='Enter your name'
+            required
+          />
+        </div>
+        <div className='form-group mb-2'>
+          <label htmlFor='email'>Email address</label>
+          <input
+            type='email'
+            className='form-control mb-1'
+            id='email'
+            name='email'
+            aria-describedby='emailHelp'
+            onChange={onChange}
+            placeholder='Enter email'
+            required
+          />
+          <small id='emailHelp' className='form-text text-muted mb-3'>
+            We'll never share your email with anyone else.
+          </small>
+        </div>
+        <div className='form-group mb-2'>
+          <label htmlFor='password'>Password</label>
+          <input
+            type='password'
+            className='form-control'
+            name='password'
+            id='password'
+            onChange={onChange}
+            placeholder='Password'
+            minLength={5}
+            required
+          />
+        </div>
+        <div className='form-group mb-3'>
+          <label htmlFor='cpassword'>Confirm Password</label>
+          <input
+            type='password'
+            name='cpassword'
+            className='form-control'
+            id='cpassword'
+            onChange={onChange}
+            minLength={5}
+            placeholder='Confirm Password'
+            required
+          />
+        </div>
+        <button type='submit' className='btn btn-primary'>
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default Signup;

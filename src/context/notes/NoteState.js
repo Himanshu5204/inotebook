@@ -60,7 +60,7 @@ const NoteState = (props) => {
       }
     );
     const json = await response.json();
-    console.log(json);
+    //console.log(json);
 
     //console.log("Deleting a note", id);
     const newNotes = notes.filter((note) => {
@@ -86,7 +86,7 @@ const NoteState = (props) => {
       }
     );
     const json = await response.json();
-    console.log(json);
+    //console.log(json);
 
     let newNotes = JSON.parse(JSON.stringify(notes)); //copy created
 

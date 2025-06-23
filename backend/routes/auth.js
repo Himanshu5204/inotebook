@@ -20,10 +20,11 @@ router.post(
   ],
 
   async (req, res) => {
+    let success = false;
     // if there are validation errors, return a 400 Bad Request response with the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() }); //400 Bad Request + json array of errors
+      return res.status(400).json({success, errors: errors.array() }); //400 Bad Request + json array of errors
     }
 
     // mongoose method to create a new user +  req.body contains the data sent in the request body
@@ -33,6 +34,7 @@ router.post(
       console.log(user); //null if user not found, otherwise user object
       if (user) {
         return res.status(400).json({
+          success,
           error: "Sorry a user with this email already exists",
         });
       }
@@ -43,7 +45,7 @@ router.post(
       user = await User.create({
         name: req.body.name,
         password: secPass,
-        email: req.body.email,
+        email: req.body.email,  
       });
 
       const Data = {
@@ -53,8 +55,9 @@ router.post(
       };
       const authToken = jwt.sign(Data, JWT_SECRET); // Sign the JWT with the user data and secret key
       // console.log("JWT Token:", authToken); // Log the JWT token for debugging
-      // res.json({authToken:authToken,}); same as below when someone give token we get above Data
-      res.json(authToken); // Return the created user as JSON response shown in Postman or Thunder Client
+                                    // res.json({authToken:authToken,}); same as below when someone give token we get above Data
+      success = true;
+      res.json({success,authToken}); // Return the created user as JSON response shown in Postman or Thunder Client
     } catch (error) {
       console.error("Error creating user:", error.message);
       res.status(500).json({
@@ -62,7 +65,8 @@ router.post(
         message: error.message,
       }); // Handle errors if needed
     }
-
+  }
+);
     // async await so no need to use .then() and .catch() here
     // .then((user) => res.json(user)) //promise to return the created user Return the created user as JSON response
     //   .catch((err) => {
@@ -75,8 +79,7 @@ router.post(
 
     // res.send(req.body) bcz res.json(user));
     //res.send('Hello Himanshu! This is the auth route.');
-  }
-);
+
 
 // Route 2: Authenticate a User using : POST "/api/auth/login" (no login/authentication required)
 router.post(
