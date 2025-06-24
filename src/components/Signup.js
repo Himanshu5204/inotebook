@@ -21,10 +21,10 @@ const Signup = (props) => {
       body: JSON.stringify({ name, email, password })
     });
     const json = await response.json();
-    console.log(json);
+    console.log("New user json",json);
     if (json.success) {
       // save the auth token and redirect
-      localStorage.setItem('token', json.authtoken);
+      localStorage.setItem('token', json.authToken);  
       navigate('/');
       props.showAlert('Account Created Successfully', 'success');
     } else {
@@ -37,7 +37,8 @@ const Signup = (props) => {
   };
 
   return (
-    <div className='container'>
+    <div className='container mt-2'>
+      <h2 className='my-3'>Create an Account to use iNoteBook</h2>
       <form onSubmit={handleSubmit}>
         <div className='form-group mb-2'>
           <label htmlFor='exampleInputEmail1'>Name</label>

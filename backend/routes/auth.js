@@ -40,7 +40,7 @@ router.post(
       }
       const salt = await bcrypt.genSalt(10); // Generate a salt for hashing the password
       secPass = await bcrypt.hash(req.body.password, salt); // Hash the password using bcrypt
-      console.log("Hashed Password:", secPass); // Log the hashed password for debugging
+      //console.log("Hashed Password:", secPass); // Log the hashed password for debugging
       // Create a new user if no user with this email exists no every time we reach this point, we know that the email is unique
       user = await User.create({
         name: req.body.name,
@@ -123,7 +123,7 @@ router.post(
         },
       };
       const authToken = jwt.sign(Data, JWT_SECRET); // Sign the JWT with the user data and secret key
-      //console.log("JWT Token:", authToken); // Log the JWT token for debugging
+      console.log("JWT Token:", authToken); // Log the JWT token for debugging
       success = true;
       res.json({success , authToken}); // Return the JWT token as JSON response
     } catch (error) {
@@ -133,7 +133,7 @@ router.post(
         message: error.message,
       }); // Handle errors if needed
     }
-  }
+  }   
 );
 
 // Route 3: Get logged-in User details using : POST "/api/auth/getuser" (login required)

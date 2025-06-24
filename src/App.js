@@ -27,7 +27,7 @@ function App() {
       {/* NoteState as context that is used in all below components */}
       <NoteState>
         <Router>
-          <Navbar />
+          <Navbar showAlert={showAlert}/>
           <Alert alert={alert} />
           <div className='container'>
             <Routes>
