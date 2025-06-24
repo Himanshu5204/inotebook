@@ -1,7 +1,7 @@
 import React, { useContext ,useState} from "react";
 import noteContext from "../context/notes/NoteContext";
 
-const AddNote = () => {
+const AddNote = (props) => {
      const context = useContext(noteContext); //for using context notestate.js ..one step up
       const {addNote } = context; //notestate context ma addnote function add che
 
@@ -11,10 +11,11 @@ const AddNote = () => {
         e.preventDefault(); //to avoid page refresh
         addNote(note.title,note.description,note.tag);
         setNote({title:"",description:"",tag:""});
+        props.showAlert("Added Successfully","success");
       }
 
       const onChange=(e)=>{
-        console.log(e.target.value);
+        //console.log(e.target.value);
         setNote({...note,[e.target.name]:e.target.value}); // ... note ni andar je hoy te rahe and next values add/overwrite kari dejo
       }
 

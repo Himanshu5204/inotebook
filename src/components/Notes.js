@@ -3,7 +3,7 @@ import NoteItem from './NoteItem';
 import AddNote from './AddNote';
 import noteContext from '../context/notes/NoteContext';
 
-const Notes = () => {
+const Notes = (props) => {
   const context = useContext(noteContext); //for using context notestate.js ..one step up
   const { notes, getNotes,editNote} = context;
   useEffect(() => {
@@ -22,13 +22,12 @@ const Notes = () => {
     setNote({id:currentNote._id,etitle:currentNote.title,edescription:currentNote.description,etag:currentNote.tag});
   };
 
-  
-
   const handleClick = (e) => {
     //console.log('Updating a note',note);
     // e.preventDefault(); //to avoid page refresh not need here bcz update node button is not part here
     editNote(note.id,note.etitle,note.edescription,note.etag);
     refClose.current.click(); //update per click button close
+    props.showAlert("Updated Successfully","success");
   };
 
   const onChange = (e) => {
@@ -38,7 +37,7 @@ const Notes = () => {
 
   return (
     <>
-      <AddNote />
+      <AddNote showAlert={props.showAlert}/>
       <button type='button' className='btn btn-primary d-none' data-bs-toggle='modal' ref={ref} data-bs-target='#exampleModal'>
         Launch demo modal
       </button>
@@ -113,7 +112,7 @@ const Notes = () => {
           No notes to display
           </div>}
         {notes.map((note) => {
-          return <NoteItem note={note} key={note._id} updateNote={updateNote} />;
+          return <NoteItem note={note} key={note._id} updateNote={updateNote} showAlert={props.showAlert} />;
         })}
       </div>
     </>

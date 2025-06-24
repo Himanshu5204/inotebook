@@ -1,12 +1,13 @@
 
 import Notes from "./Notes";
 
-const Home = () => {
-
-  return (
+const Home = (props) => {
+  {/* <AddNote showAlert={props.showAlert}/> */}
+  const {showAlert}=props;  // destructuring
+  return ( 
     <div>
      {/* <AddNote/> */}
-     <Notes/>
+     <Notes showAlert={showAlert}/>
     </div>
   );
 };

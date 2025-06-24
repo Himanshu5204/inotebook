@@ -1,8 +1,8 @@
 import React from 'react';
-import { useNavigate  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
-    let navigate = useNavigate ();
+const Login = (props) => {
+  let navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(e);
@@ -19,13 +19,13 @@ const Login = () => {
       //save the auth token and redirect
       localStorage.setItem('token', json.authtoken);
       navigate('/');
-    }
-    else{
-      alert('Invalid Credentials');
+      props.showAlert('Logged In Successfully', 'success');
+    } else {
+      props.showAlert('Invalid Details', 'danger');
     }
   };
   return (
-    <form  onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <div className='form-group'>
         <label htmlFor='email'>Email address</label>
         <input
