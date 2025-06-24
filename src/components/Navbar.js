@@ -1,4 +1,4 @@
-import React, { useEffect , useState} from 'react'; //rafce react arrow function component export
+import React, { useEffect, useState } from 'react'; //rafce react arrow function component export
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import UserProfile from './UserProfile';
 import { FaUserCircle } from 'react-icons/fa';
@@ -74,7 +74,7 @@ const Navbar = (props) => {
               <FaUserCircle />
             </button>
           )}
-          {!localStorage.getItem('token') ? (
+          {!localStorage.getItem('token') && (
             <form className='d-flex'>
               <Link className='btn btn-primary mx-2' to='/login' role='button'>
                 Login
@@ -83,10 +83,6 @@ const Navbar = (props) => {
                 Signup
               </Link>
             </form>
-          ) : (
-            <button className='btn btn-primary ' onClick={handleLogout}>
-              Logout
-            </button>
           )}
         </div>
       </div>

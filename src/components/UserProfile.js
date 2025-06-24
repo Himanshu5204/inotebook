@@ -15,8 +15,8 @@ const UserProfile = ({ show, handleClose, showAlert }) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('token'),
-      },
+        'auth-token': localStorage.getItem('token')
+      }
     });
     const data = await res.json();
     setUser({ name: data.name, email: data.email });
@@ -34,9 +34,9 @@ const UserProfile = ({ show, handleClose, showAlert }) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('token'),
+        'auth-token': localStorage.getItem('token')
       },
-      body: JSON.stringify({ name: form.name }),
+      body: JSON.stringify({ name: form.name })
     });
     const data = await res.json();
     if (res.ok) {
@@ -49,32 +49,63 @@ const UserProfile = ({ show, handleClose, showAlert }) => {
   };
 
   return (
-    <div className={`modal fade${show ? ' show d-block' : ''}`} tabIndex="-1" style={{ background: show ? 'rgba(0,0,0,0.5)' : 'none' }}>
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">User Profile</h5>
-            <button type="button" className="btn-close" onClick={handleClose}></button>
+    <div
+      className={`modal fade${show ? ' show d-block' : ''}`}
+      tabIndex='-1'
+      style={{ background: show ? 'rgba(0,0,0,0.5)' : 'none' }}>
+      <div className='modal-dialog'>
+        <div className='modal-content'>
+          <div className='modal-header'>
+            <h5 className='modal-title'>User Profile</h5>
+            <button type='button' className='btn-close' onClick={handleClose}></button>
           </div>
-          <div className="modal-body">
+          <div className='modal-body'>
             {editMode ? (
               <form onSubmit={handleUpdate}>
-                <div className="mb-3">
-                  <label className="form-label">Name</label>
-                  <input type="text" className="form-control" name="name" value={form.name} onChange={handleChange} required minLength={3} />
+                <div className='mb-3'>
+                  <label className='form-label'>Name</label>
+                  <input
+                    type='text'
+                    className='form-control'
+                    name='name'
+                    value={form.name}
+                    onChange={handleChange}
+                    required
+                    minLength={3}
+                  />
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input type="email" className="form-control" name="email" value={form.email} disabled />
+                <div className='mb-3'>
+                  <label className='form-label'>Email</label>
+                  <input type='email' className='form-control' name='email' value={form.email} disabled />
                 </div>
-                <button type="submit" className="btn btn-primary">Save</button>
-                <button type="button" className="btn btn-secondary ms-2" onClick={() => setEditMode(false)}>Cancel</button>
+                <button type='submit' className='btn btn-primary'>
+                  Save
+                </button>
+                <button type='button' className='btn btn-secondary ms-2' onClick={() => setEditMode(false)}>
+                  Cancel
+                </button>
               </form>
             ) : (
               <>
-                <p><strong>Name:</strong> {user.name}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                <button className="btn btn-outline-primary" onClick={() => setEditMode(true)}>Edit</button>
+                <p>
+                  <strong>Name:</strong> {user.name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {user.email}
+                </p>
+                <button className='btn btn-outline-primary me-2' onClick={() => setEditMode(true)}>
+                  Edit
+                </button>
+                <button
+                  className='btn btn-danger'
+                  onClick={() => {
+                    localStorage.removeItem('token');
+                    showAlert('Logged out successfully', 'success');
+                    handleClose();
+                    window.location.reload(); // or use navigate('/login') if you want to redirect
+                  }}>
+                  Logout
+                </button>
               </>
             )}
           </div>
