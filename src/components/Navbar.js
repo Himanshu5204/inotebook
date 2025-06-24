@@ -1,17 +1,22 @@
 import React, { useEffect } from 'react'; //rafce react arrow function component export
-import { Link, useLocation , useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = (props) => {
-   let navigate = useNavigate();
+  let navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('token');
     props.showAlert('Logged out successfully', 'success');
     navigate('/login');
-  }
+  };
   let location = useLocation();
   useEffect(() => {
     //console.log(location);
   }, [location]); //when change location this useEffect will run see console pathname is chnaged
+
+  // Add search input handler
+  const handleSearchChange = (e) => {
+    props.setSearch(e.target.value);
+  };
   return (
     <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
       <div className='container-fluid'>
@@ -43,7 +48,14 @@ const Navbar = (props) => {
           </ul>
           {location.pathname !== '/login' && location.pathname !== '/signup' && (
             <form className='d-flex'>
-              <input className='form-control mx-1' type='search' placeholder='Search' aria-label='Search' />
+              <input
+                className='form-control mx-1'
+                type='search'
+                placeholder='Search'
+                aria-label='Search'
+                value={props.search}
+                onChange={handleSearchChange}
+              />
               <button className='btn btn-outline-success mx-3' type='submit'>
                 Search
               </button>
@@ -59,7 +71,7 @@ const Navbar = (props) => {
               </Link>
             </form>
           ) : (
-            <button className='btn btn-primary ' onClick={handleLogout} >
+            <button className='btn btn-primary ' onClick={handleLogout}>
               Logout
             </button>
           )}

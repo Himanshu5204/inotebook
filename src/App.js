@@ -11,6 +11,7 @@ import { useState } from 'react';
 
 function App() {
   const [alert, setAlert] = useState(null);
+  const [search, setSearch] = useState(''); // Add search state
 
   const showAlert = (message, type) => {
     setAlert({
@@ -27,11 +28,11 @@ function App() {
       {/* NoteState as context that is used in all below components */}
       <NoteState>
         <Router>
-          <Navbar showAlert={showAlert}/>
+          <Navbar showAlert={showAlert} search={search} setSearch={setSearch}/>
           <Alert alert={alert} />
           <div className='container'>
             <Routes>
-              <Route path='/' element={<Home showAlert={showAlert} />} />
+              <Route path='/' element={<Home showAlert={showAlert} search={search} setSearch={setSearch}/>} />
               <Route path='/about' element={<About />} />
               <Route path='/login' element={<Login showAlert={showAlert} />} />
               <Route path='/signup' element={<Signup showAlert={showAlert} />} />

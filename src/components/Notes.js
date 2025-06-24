@@ -11,7 +11,7 @@ const Notes = (props) => {
   //used as componentDidMount
   useEffect(() => {
     //if token exist then only fetch notes
-    console.log("localStorage.getItem('token')",localStorage.getItem('token'));
+    //console.log("localStorage.getItem('token')",localStorage.getItem('token'));
     if (localStorage.getItem('token')) {
       getNotes();
       // eslint-disable-next-line
@@ -20,6 +20,40 @@ const Notes = (props) => {
       // eslint-disable-next-line
     }
   }, []); // one time fetch []
+
+  useEffect(() => {
+    const trimmedSearch = props.search.trim().toLowerCase();
+    if (trimmedSearch === '') {
+      setFiltered(notes); // Show all notes when search is cleared
+    } else {
+      const result = notes.filter((note) => note.title.toLowerCase().includes(trimmedSearch));
+
+      setFiltered(result); // Show matched notes only
+    }
+  }, [props.search, notes]);
+
+  // 2 second delay code
+  // useEffect(() => {
+  //   if (props.search.trim() === '') {
+  //     setFiltered(notes); // show all notes
+  //   } else {
+  //     const result = notes.filter((note) => note.title.toLowerCase().includes(props.search.toLowerCase()));
+
+  //     if (result.length === 0) {
+  //       setFiltered([]); // Show no notes
+  //       props.showAlert('No matching notes found', 'warning');
+
+  //       // Restore notes after 2 sec
+  //       setTimeout(() => {
+  //         setFiltered(notes);
+  //       }, 2000);
+  //     } else {
+  //       setFiltered(result);
+  //     }
+  //   }
+  // }, [props.search, notes]);
+
+  const [filtered, setFiltered] = useState(notes);
 
   const [note, setNote] = useState({ title: '', description: '', tag: '' });
   const ref = useRef(null);
@@ -133,10 +167,20 @@ const Notes = (props) => {
       </div>
       <div className='row my-3'>
         <h2>Your a Note</h2>
-        {notes.length === 0 && <div className='container my-3'>No notes to display</div>}
-        {notes.map((note) => {
-          return <NoteItem note={note} key={note._id} updateNote={updateNote} showAlert={props.showAlert} />;
-        })}
+        {/* {filtered.length === 0 ? (
+          <div className='container my-3'>No notes to display</div>
+        ) : (
+          filtered.map((note) => (
+            <NoteItem note={note} key={note._id} updateNote={updateNote} showAlert={props.showAlert} />
+          ))
+        )} */}
+        {filtered.length === 0 ? (
+          <div className='container my-3 text-danger'>No matching notes found.</div>
+        ) : (
+          filtered.map((note) => (
+            <NoteItem note={note} key={note._id} updateNote={updateNote} showAlert={props.showAlert} />
+          ))
+        )}
       </div>
     </>
   );

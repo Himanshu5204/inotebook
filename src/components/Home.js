@@ -7,7 +7,7 @@ const Home = (props) => {
   return ( 
     <div>
      {/* <AddNote/> */}
-     <Notes showAlert={showAlert}/>
+     <Notes showAlert={showAlert} search={props.search} />
     </div>
   );
 };
