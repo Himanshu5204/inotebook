@@ -32,27 +32,6 @@ const Notes = (props) => {
     }
   }, [props.search, notes]);
 
-  // 2 second delay code
-  // useEffect(() => {
-  //   if (props.search.trim() === '') {
-  //     setFiltered(notes); // show all notes
-  //   } else {
-  //     const result = notes.filter((note) => note.title.toLowerCase().includes(props.search.toLowerCase()));
-
-  //     if (result.length === 0) {
-  //       setFiltered([]); // Show no notes
-  //       props.showAlert('No matching notes found', 'warning');
-
-  //       // Restore notes after 2 sec
-  //       setTimeout(() => {
-  //         setFiltered(notes);
-  //       }, 2000);
-  //     } else {
-  //       setFiltered(result);
-  //     }
-  //   }
-  // }, [props.search, notes]);
-
   const [filtered, setFiltered] = useState(notes);
 
   const [note, setNote] = useState({ title: '', description: '', tag: '' });
@@ -167,13 +146,6 @@ const Notes = (props) => {
       </div>
       <div className='row my-3'>
         <h2>Your a Note</h2>
-        {/* {filtered.length === 0 ? (
-          <div className='container my-3'>No notes to display</div>
-        ) : (
-          filtered.map((note) => (
-            <NoteItem note={note} key={note._id} updateNote={updateNote} showAlert={props.showAlert} />
-          ))
-        )} */}
         {filtered.length === 0 ? (
           <div className='container my-3 text-danger'>No matching notes found.</div>
         ) : (
