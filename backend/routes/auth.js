@@ -1,22 +1,22 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const User = require("../models/User"); // Assuming you have a User model defined in models/User.js
-const { body, validationResult } = require("express-validator"); // validationResult is a function from express-validator that checks for validation errors
-const bcrypt = require("bcryptjs"); // Uncomment if you want to hash passwords before saving them
-const jwt = require("jsonwebtoken"); // Uncomment if you want to use JWT for authentication
-const fetchuser = require("../middleware/fetchuser"); //The ../ means "go up one directory level". bcz it it used in auth.js file
+const User = require('../models/User'); // Assuming you have a User model defined in models/User.js
+const { body, validationResult } = require('express-validator'); // validationResult is a function from express-validator that checks for validation errors
+const bcrypt = require('bcryptjs'); // Uncomment if you want to hash passwords before saving them
+const jwt = require('jsonwebtoken'); // Uncomment if you want to use JWT for authentication
+const fetchuser = require('../middleware/fetchuser'); //The ../ means "go up one directory level". bcz it it used in auth.js file
 
-const JWT_SECRET = "Himanshu@123"; // Secret key for JWT, should be stored in an environment variable in production
+const JWT_SECRET = 'Himanshu@123'; // Secret key for JWT, should be stored in an environment variable in production
 
 // Route 1: Create a User using : POST "/api/auth/createuser" (no login/authentication required)
 router.post(
-  "/createuser",
+  '/createuser',
   [
-    body("name", "Enter a valid name").isLength({ min: 3 }),
-    body("email", "Enter a valid email").isEmail(),
-    body("password", "Password must be at least 5 characters long").isLength({
-      min: 5,
-    }),
+    body('name', 'Enter a valid name').isLength({ min: 3 }),
+    body('email', 'Enter a valid email').isEmail(),
+    body('password', 'Password must be at least 5 characters long').isLength({
+      min: 5
+    })
   ],
 
   async (req, res) => {
@@ -24,7 +24,7 @@ router.post(
     // if there are validation errors, return a 400 Bad Request response with the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({success, errors: errors.array() }); //400 Bad Request + json array of errors
+      return res.status(400).json({ success, errors: errors.array() }); //400 Bad Request + json array of errors
     }
 
     // mongoose method to create a new user +  req.body contains the data sent in the request body
@@ -35,7 +35,7 @@ router.post(
       if (user) {
         return res.status(400).json({
           success,
-          error: "Sorry a user with this email already exists",
+          error: 'Sorry a user with this email already exists'
         });
       }
       const salt = await bcrypt.genSalt(10); // Generate a salt for hashing the password
@@ -45,49 +45,45 @@ router.post(
       user = await User.create({
         name: req.body.name,
         password: secPass,
-        email: req.body.email,  
+        email: req.body.email
       });
 
       const Data = {
         user: {
-          id: user.id, // user._id is the unique identifier for the user in MongoDB
-        },
+          id: user.id // user._id is the unique identifier for the user in MongoDB
+        }
       };
       const authToken = jwt.sign(Data, JWT_SECRET); // Sign the JWT with the user data and secret key
       // console.log("JWT Token:", authToken); // Log the JWT token for debugging
-                                    // res.json({authToken:authToken,}); same as below when someone give token we get above Data
+      // res.json({authToken:authToken,}); same as below when someone give token we get above Data
       success = true;
-      res.json({success,authToken}); // Return the created user as JSON response shown in Postman or Thunder Client
+      res.json({ success, authToken }); // Return the created user as JSON response shown in Postman or Thunder Client
     } catch (error) {
-      console.error("Error creating user:", error.message);
+      console.error('Error creating user:', error.message);
       res.status(500).json({
-        error: "Failed to create user due to server internal error! ", //Usered spellic error
-        message: error.message,
+        error: 'Failed to create user due to server internal error! ', //Usered spellic error
+        message: error.message
       }); // Handle errors if needed
     }
   }
 );
-    // async await so no need to use .then() and .catch() here
-    // .then((user) => res.json(user)) //promise to return the created user Return the created user as JSON response
-    //   .catch((err) => {
-    //     console.error("Error creating user:", err);
-    //     res.status(500).json({
-    //       error: "Failed to create user due to server internal error,unique emmail",
-    //       message: err.message,
-    //     });
-    //   }); // Handle errors if needed
+// async await so no need to use .then() and .catch() here
+// .then((user) => res.json(user)) //promise to return the created user Return the created user as JSON response
+//   .catch((err) => {
+//     console.error("Error creating user:", err);
+//     res.status(500).json({
+//       error: "Failed to create user due to server internal error,unique emmail",
+//       message: err.message,
+//     });
+//   }); // Handle errors if needed
 
-    // res.send(req.body) bcz res.json(user));
-    //res.send('Hello Himanshu! This is the auth route.');
-
+// res.send(req.body) bcz res.json(user));
+//res.send('Hello Himanshu! This is the auth route.');
 
 // Route 2: Authenticate a User using : POST "/api/auth/login" (no login/authentication required)
 router.post(
-  "/login",
-  [
-    body("email", "Enter a valid email").isEmail(),
-    body("password", "Password cannot be blank").exists(),
-  ],
+  '/login',
+  [body('email', 'Enter a valid email').isEmail(), body('password', 'Password cannot be blank').exists()],
   async (req, res) => {
     let success = false;
     // if there are validation errors, return a 400 Bad Request response with the errors
@@ -103,7 +99,7 @@ router.post(
       if (!user) {
         success = false;
         return res.status(400).json({
-          error: "Please try to login with correct credentials", //as email not found
+          error: 'Please try to login with correct credentials' //as email not found
         });
       }
 
@@ -113,42 +109,62 @@ router.post(
         success = false;
         return res.status(400).json({
           success,
-          error: "Please try to login with correct credentials",
+          error: 'Please try to login with correct credentials'
         });
       }
 
       const Data = {
         user: {
-          id: user.id, // user._id is the unique identifier for the user in MongoDB
-        },
+          id: user.id // user._id is the unique identifier for the user in MongoDB
+        }
       };
       const authToken = jwt.sign(Data, JWT_SECRET); // Sign the JWT with the user data and secret key
-      console.log("JWT Token:", authToken); // Log the JWT token for debugging
+      console.log('JWT Token:', authToken); // Log the JWT token for debugging
       success = true;
-      res.json({success , authToken}); // Return the JWT token as JSON response
+      res.json({ success, authToken }); // Return the JWT token as JSON response
     } catch (error) {
-      console.error("Error logging in:", error.message);
+      console.error('Error logging in:', error.message);
       res.status(500).json({
-        error: "Failed to login due to server internal error!",
-        message: error.message,
+        error: 'Failed to login due to server internal error!',
+        message: error.message
       }); // Handle errors if needed
     }
-  }   
+  }
 );
 
 // Route 3: Get logged-in User details using : POST "/api/auth/getuser" (login required)
-router.post("/getuser",fetchuser, async (req, res) => {
+router.post('/getuser', fetchuser, async (req, res) => {
   try {
     // Get the user ID from the JWT token
     const userId = req.user.id; // Assuming req.user is populated with the authenticated user's data above login Data mathi aavse
-    const user = await User.findById(userId).select("-password"); // Exclude password from the response
+    const user = await User.findById(userId).select('-password'); // Exclude password from the response
     res.json(user); // Return the user details as JSON response res.send(user) is also fine
   } catch (error) {
-    console.error("Error fetching user details:", error.message);
+    console.error('Error fetching user details:', error.message);
     res.status(500).json({
-      error: "Failed to fetch user details due to server internal error!",
-      message: error.message,
+      error: 'Failed to fetch user details due to server internal error!',
+      message: error.message
     }); // Handle errors if needed
   }
 });
+
+// Route 4: Update logged-in User details using : PUT "/api/auth/updateuser" (login required)
+router.put('/updateuser', fetchuser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name } = req.body;
+    if (!name || name.length < 3) {
+      return res.status(400).json({ error: 'Name must be at least 3 characters long' });
+    }
+    const user = await User.findByIdAndUpdate(userId, { $set: { name } }, { new: true, select: '-password' });
+    res.json({ success: true, user });
+  } catch (error) {
+    console.error('Error updating user details:', error.message);
+    res.status(500).json({
+      error: 'Failed to update user details due to server internal error!',
+      message: error.message
+    });
+  }
+});
+
 module.exports = router;

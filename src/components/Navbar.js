@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react'; //rafce react arrow function component export
+import React, { useEffect , useState} from 'react'; //rafce react arrow function component export
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import UserProfile from './UserProfile';
+import { FaUserCircle } from 'react-icons/fa';
 
 const Navbar = (props) => {
   let navigate = useNavigate();
@@ -17,6 +19,8 @@ const Navbar = (props) => {
   const handleSearchChange = (e) => {
     props.setSearch(e.target.value);
   };
+
+  const [showProfile, setShowProfile] = useState(false);
   return (
     <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
       <div className='container-fluid'>
@@ -61,6 +65,15 @@ const Navbar = (props) => {
               </button>
             </form>
           )}
+          {localStorage.getItem('token') && (
+            <button
+              className='btn btn-link text-light me-2 p-0'
+              style={{ fontSize: '2rem', verticalAlign: 'middle' }}
+              onClick={() => setShowProfile(true)}
+              title='Profile'>
+              <FaUserCircle />
+            </button>
+          )}
           {!localStorage.getItem('token') ? (
             <form className='d-flex'>
               <Link className='btn btn-primary mx-2' to='/login' role='button'>
@@ -77,6 +90,7 @@ const Navbar = (props) => {
           )}
         </div>
       </div>
+      <UserProfile show={showProfile} handleClose={() => setShowProfile(false)} showAlert={props.showAlert} />
     </nav>
   );
 };
