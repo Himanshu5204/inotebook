@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'; //rafce react arrow function component export
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 import UserProfile from './UserProfile';
 import { FaUserCircle } from 'react-icons/fa';
 
 const Navbar = (props) => {
-  let navigate = useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    props.showAlert('Logged out successfully', 'success');
-    navigate('/login');
-  };
+  //let navigate = useNavigate();
+  // const handleLogout = () => {
+  //   localStorage.removeItem('token');
+  //   props.showAlert('Logged out successfully', 'success');
+  //   navigate('/login');
+  // };
+
   let location = useLocation();
   useEffect(() => {
     //console.log(location);
@@ -21,6 +22,14 @@ const Navbar = (props) => {
   };
 
   const [showProfile, setShowProfile] = useState(false);
+
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
+  useEffect(() => {
+    document.body.className = theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark';
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+  const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
+
   return (
     <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
       <div className='container-fluid'>
@@ -50,6 +59,12 @@ const Navbar = (props) => {
               </Link>
             </li>
           </ul>
+          <button
+            className={`btn btn-${theme === 'dark' ? 'light' : 'dark'} mx-2`}
+            onClick={toggleTheme}
+            title='Toggle theme'>
+            {theme === 'dark' ? '🌞 Light' : '🌙 Dark'}
+          </button>
           {location.pathname !== '/login' && location.pathname !== '/signup' && (
             <form className='d-flex'>
               <input
@@ -60,9 +75,9 @@ const Navbar = (props) => {
                 value={props.search}
                 onChange={handleSearchChange}
               />
-              <button className='btn btn-outline-success mx-3' type='submit'>
+              <Link className='btn btn-outline-success mx-3' type='submit' to='/'>
                 Search
-              </button>
+              </Link>
             </form>
           )}
           {localStorage.getItem('token') && (
