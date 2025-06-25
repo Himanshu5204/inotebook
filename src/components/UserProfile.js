@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link,useNavigate} from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 const UserProfile = ({ show, handleClose, showAlert }) => {
-  let navigate = useNavigate();
+  //let navigate = useNavigate();
   const [user, setUser] = useState({ name: '', email: '' });
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({ name: '', email: '' });

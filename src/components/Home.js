@@ -9,7 +9,7 @@ const Home = (props) => {
     if (!localStorage.getItem('token')) {
       navigate('/login'); // Redirect to login if not authenticated
     }
-  }, []);
+  }, [navigate]); // Add navigate to the dependency array
 
   return (
     <div>

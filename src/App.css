@@ -45,3 +45,16 @@ body.bg-light {
   background-color: #f8f9fa !important;
   color: #181818 !important;
 }
+
+.footer-text {
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+body.bg-dark .footer-text {
+  color: #cccccc;
+}
+
+body.bg-light .footer-text {
+  color: #333333;
+}
