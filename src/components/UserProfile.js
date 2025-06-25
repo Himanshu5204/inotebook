@@ -159,8 +159,8 @@ const UserProfile = ({ show, handleClose, showAlert }) => {
                     localStorage.removeItem('token');
                     showAlert('Logged out successfully', 'success');
                     handleClose();
-                    //window.location.reload(); // or use navigate('/login') if you want to redirect
-                    navigate('/login') 
+                    window.location.reload(); // or use navigate('/login') if you want to redirect
+                    //navigate('/login') //no refresh page
                   }}>
                   Logout
                 </Link>

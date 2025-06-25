@@ -1,13 +1,19 @@
-
-import Notes from "./Notes";
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Notes from './Notes';
 
 const Home = (props) => {
-  {/* <AddNote showAlert={props.showAlert}/> */}
-  const {showAlert}=props;  // destructuring
-  return ( 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigate('/login'); // Redirect to login if not authenticated
+    }
+  }, []);
+
+  return (
     <div>
-     {/* <AddNote/> */}
-     <Notes showAlert={showAlert} search={props.search} />
+      <Notes showAlert={props.showAlert} search={props.search} />
     </div>
   );
 };
