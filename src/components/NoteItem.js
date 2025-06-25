@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'; //rafce
 import noteContext from '../context/notes/NoteContext';
+import {FaThumbtack } from 'react-icons/fa';
 
 const NoteItem = (props) => {
   const context = useContext(noteContext); //for using context notestate.js ..one step up
@@ -22,8 +23,14 @@ const NoteItem = (props) => {
               className='fa-solid fa-pen-to-square mx-2'
               onClick={() => {
                 updateNote(note);
-                
               }}></i>
+            <button
+              onClick={() => props.togglePin(note._id, !note.pinned)}
+              className='btn btn-link p-0 mx-1'
+              title={note.pinned ? 'Unpin' : 'Pin'}
+              style={{ color: note.pinned ? '#b00505' : '#888', transform: note.pinned ? 'rotate(-45deg)' : 'none' }}>
+              <FaThumbtack />
+            </button>
           </div>
           <p className='card-text'>{note.description}</p>
         </div>

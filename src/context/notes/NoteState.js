@@ -46,7 +46,7 @@ const NoteState = (props) => {
       return;
     }
     const newNote = await response.json();
-    console.log("Adding a note=>",newNote);
+    console.log('Adding a note=>', newNote);
     if (!newNote || !newNote._id) {
       console.error('Error adding note:', newNote);
       return;
@@ -105,9 +105,22 @@ const NoteState = (props) => {
     //console.log(newNotes);
     setNotes(newNotes);
   };
+  const togglePin = async (id, pinned) => {
+    const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({ pinned })
+    });
+    const updatedNote = await response.json();
+    setNotes(notes.map((note) => (note._id === id ? updatedNote : note)));
+  };
+
   return (
     //export as value=
-    <noteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes }}>
+    <noteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes, togglePin }}>
       {props.children}
     </noteContext.Provider> //send value of state and update fun as object to children
   );

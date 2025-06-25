@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Notes = (props) => {
   const context = useContext(noteContext); //for using context notestate.js ..one step up
-  const { notes, getNotes, editNote } = context;
+  const { notes, getNotes, editNote ,togglePin} = context;
   let navigate = useNavigate();
   //used as componentDidMount
   useEffect(() => {
@@ -19,7 +19,7 @@ const Notes = (props) => {
       navigate('/login');
       // eslint-disable-next-line
     }
-  }, []); // one time fetch []
+  }, [navigate]); // one time fetch [] , dependency 
 
   useEffect(() => {
     const trimmedSearch = props.search.trim().toLowerCase();
@@ -30,7 +30,7 @@ const Notes = (props) => {
 
       setFiltered(result); // Show matched notes only
     }
-  }, [props.search, notes]);
+  }, [props.search, notes,navigate]);
 
   const [filtered, setFiltered] = useState(notes);
 
@@ -149,9 +149,18 @@ const Notes = (props) => {
         {filtered.length === 0 ? (
           <div className='container my-3 text-danger'>No matching notes found.</div>
         ) : (
-          filtered.map((note) => (
-            <NoteItem note={note} key={note._id} updateNote={updateNote} showAlert={props.showAlert} />
-          ))
+          filtered
+            .slice()
+            .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
+            .map((note) => (
+              <NoteItem
+                note={note}
+                key={note._id}
+                updateNote={updateNote}
+                showAlert={props.showAlert}
+                togglePin={togglePin}
+              />
+            ))
         )}
       </div>
     </>
