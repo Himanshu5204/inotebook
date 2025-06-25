@@ -14,7 +14,7 @@ const Login = (props) => {
       body: JSON.stringify({ email: e.target.email.value, password: e.target.password.value })
     });
     const json = await response.json();
-    console.log("Login json",json);
+    //console.log("Login json",json);
     if (json.success) {
       //save the auth token and redirect
       localStorage.setItem('token', json.authToken);

@@ -31,7 +31,7 @@ router.post(
     // checks whether the user with this email exists already
     try {
       let user = await User.findOne({ email: req.body.email });
-      console.log(user); //null if user not found, otherwise user object
+      // console.log(user); //null if user not found, otherwise user object
       if (user) {
         return res.status(400).json({
           success,
@@ -119,7 +119,7 @@ router.post(
         }
       };
       const authToken = jwt.sign(Data, JWT_SECRET); // Sign the JWT with the user data and secret key
-      console.log('JWT Token:', authToken); // Log the JWT token for debugging
+      // console.log('JWT Token:', authToken); // Log the JWT token for debugging
       success = true;
       res.json({ success, authToken }); // Return the JWT token as JSON response
     } catch (error) {

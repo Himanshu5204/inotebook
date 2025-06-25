@@ -46,7 +46,7 @@ const NoteState = (props) => {
       return;
     }
     const newNote = await response.json();
-    console.log('Adding a note=>', newNote);
+    //console.log('Adding a note=>', newNote);
     if (!newNote || !newNote._id) {
       console.error('Error adding note:', newNote);
       return;
