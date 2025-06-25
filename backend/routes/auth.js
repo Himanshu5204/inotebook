@@ -167,4 +167,27 @@ router.put('/updateuser', fetchuser, async (req, res) => {
   }
 });
 
+// Route 5: Change password (PUT /api/auth/changepassword)
+router.put('/changepassword', fetchuser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword || newPassword.length < 5) {
+      return res.status(400).json({ error: 'Invalid input' });
+    }
+    const user = await User.findById(userId);
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Current password is incorrect' });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+    res.json({ success: true, message: 'Password changed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error', message: error.message });
+  }
+});
+
 module.exports = router;
