@@ -24,7 +24,7 @@ const AddNote = (props) => {
       <h2>Add a Note</h2>
       <form className="my-3" type="submit">
         <div className="form-group">
-          <label htmlFor="title">title</label>
+          <label htmlFor="title">Title</label>
           <input
             type="text"
             id="title"
@@ -39,7 +39,7 @@ const AddNote = (props) => {
 
         </div>
         <div className="form-group">
-          <label htmlFor="description" >description</label>
+          <label htmlFor="description" >Description</label>
           <input
             type="text"
             className="form-control"
@@ -52,7 +52,7 @@ const AddNote = (props) => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="description" >tag</label>
+          <label htmlFor="description" >Tag</label>
           <input
             type="text"
             className="form-control"
